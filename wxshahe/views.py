@@ -125,6 +125,7 @@ def add_praise(request):
 
 
 def get_diet_content(request):
+    # 获取单个菜品信息
     curr_diet_id = request.GET.get('diet_id')
     curr_user_id = request.GET.get('user_id')
     log = Log.objects.filter(log_user_id=curr_user_id,
