@@ -1,0 +1,59 @@
+
+
+<view id='body'>
+<view id='top'>
+  <input placeholder='搜索' style='display:inline-block;background: #EEE;' bindinput='input' type='text'></input>
+  <button style='display:inline-block;margin-left:20rpx;' bindtap="btnclick">{{text}}</button>
+</view>
+
+<scroll-view >
+<swiper autoplay='false' interval='3000' circular='false' class='sw'>
+  <swiper-item><view><image src='https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1554309061200&di=54cdaf818ce255167cec79fb82499288&imgtype=0&src=http%3A%2F%2Fimg.pconline.com.cn%2Fimages%2Fupload%2Fupc%2Ftx%2Fphotoblog%2F1312%2F11%2Fc0%2F29510695_29510695_1386708882473.jpg' class='ad'></image></view></swiper-item>
+  <swiper-item><view><image src='http://img1.qunarzz.com/travel/d8/1410/20/ee314b018b5f64adffffffffc8d65eac.jpg' class='ad'></image></view></swiper-item>
+  <swiper-item><view><image src='http://img2.imgtn.bdimg.com/it/u=2109372982,1111755730&fm=26&gp=0.jpg' class='ad'></image></view></swiper-item>
+  <swiper-item><view><image src='http://gss0.baidu.com/-Po3dSag_xI4khGko9WTAnF6hhy/lvpics/h=800/sign=7daade46ad773912db268861c8188675/4e4a20a4462309f71bfb35e9760e0cf3d6cad6b1.jpg' class='ad'></image></view></swiper-item>
+  <swiper-item><view><image src='https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1202240407,1768772558&fm=26&gp=0.jpg' class='ad'></image></view></swiper-item>
+  <swiper-item><view><image src='https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1554309236551&di=e00b30819a28f3a4e1458d1d8c59c26a&imgtype=0&src=http%3A%2F%2Fimg3.redocn.com%2Ftupian%2F20141210%2Fhuanghedaliyumeishi_3490993.jpg' class='ad'></image></view></swiper-item>
+</swiper>
+
+
+<view id='center'>
+  <view bindtap='canteen' class='c'>
+  <view class='box'>
+    <image src='../../images/canting.png' class='content'></image>
+  </view>
+    <text style='display:block;'>餐厅</text>
+  </view>
+
+  <view bindtap='anonce' class='c'>
+  <view class='box'>
+    <image src='../../images/tongzhi.png' class='content'></image>
+  </view>
+    <text style='display:block;'>通知</text>
+  </view>
+
+  <view bindtap='character' class='c'>
+  <view class='box'>
+    <image src='../../images/sousuo.png' class='content'></image>
+  </view>
+    <text style='display:block;'>个性化</text>
+  </view>
+
+</view>
+
+<view id='tui'>特色菜品</view>
+
+<view class='last' bindtap='dish' data-dish-id="{{item.id}}"  wx:for="{{dish}}">
+  <view>
+    <image src='{{item.imagePath}}' mode='aspectFill'></image>
+    <view class='title'>{{item.title}}</view>
+    <text class='intro'>{{item.introduce}}</text>
+  </view>
+  
+  
+
+</view>
+
+</scroll-view>
+</view>
+
