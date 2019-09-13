@@ -160,6 +160,25 @@ def get_diet_content(request):
                         content_type='application/json, charset = utf-8')
 
 
+def get_comment(request):
+    # 将评论信息存入数据库
+    user_id = request.GET.get('user_id')
+    diet_id = request.GET.get('diet_id')
+    diet_comment = request.GET.get('diet_comment')
+    log = Log.objects.filter(log_user_id=user_id,
+                             log_diet_id=diet_id)
+    if len(log) == 0:
+        log = Log(log_user_id=user_id,
+                  log_diet_id=diet_id, log_diet_praise=False, log_diet_evaluation=diet_comment)
+        log.save()
+    else:
+        log[0].log_diet_evaluation = diet_comment
+        log[0].save()
+
+    info = {'info': 'success'}
+    return HttpResponse(json.dumps(info, ensure_ascii=False), content_type='application/json, charset = utf-8')
+
+
 def get_recom(request):
     # 获得个性化推荐菜品
     user_id = request.GET.get('user_id')
