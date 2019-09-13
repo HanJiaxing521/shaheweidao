@@ -19,7 +19,7 @@ from django.utils import timezone
 
 
 def register(request):
-    # 登录注册
+    """登录注册"""
     user_id = request.GET.get('openid')
     is_exist = User.objects.filter(user_id=user_id)
     if len(is_exist) != 0:
@@ -34,7 +34,7 @@ def register(request):
 
 
 def get_diet(request):
-    # 获取20个菜品对象
+    """获取20个菜品对象"""
     diet_list = Diet.objects.all()[:20]
     diet_short_list = []
     for diet in diet_list:
@@ -52,7 +52,7 @@ def get_diet(request):
 
 
 def get_praise_rank(request):
-    # 获取点赞排行信息
+    """获取点赞排行信息"""
     diet_rank = Diet.objects.order_by('-diet_praise')[:10]
     diet_list = []
     for diet in diet_rank:
@@ -70,7 +70,7 @@ def get_praise_rank(request):
 
 
 def get_cook_rank(request):
-    # 获取大厨排行信息
+    """获取大厨排行信息"""
     cook_rank = Cook.objects.order_by('-cook_praise')[:10]
     cook_list = []
     for cook in cook_rank:
@@ -86,7 +86,7 @@ def get_cook_rank(request):
 
 
 def is_manager(request):
-    # 判断当前用户是否为管理员
+    """判断当前用户是否为管理员"""
     user_id = request.GET.get('user_id')
     user_list = User.objects.all()
     for user in user_list:
@@ -97,7 +97,7 @@ def is_manager(request):
 
 
 def add_praise(request):
-    # 增加赞数量
+    """增加赞数量"""
     curr_user_id = request.GET.get('user_id')
     curr_diet_id = request.GET.get('diet_id')
     is_praise = request.GET.get('diet_praise')
@@ -127,7 +127,7 @@ def add_praise(request):
 
 
 def get_diet_content(request):
-    # 获取单个菜品信息
+    """获取单个菜品信息"""
     curr_diet_id = request.GET.get('diet_id')
     curr_user_id = request.GET.get('user_id')
     log = Log.objects.filter(log_user_id=curr_user_id,
@@ -163,7 +163,7 @@ def get_diet_content(request):
 
 
 def get_comment(request):
-    # 将评论信息存入数据库
+    """将评论信息存入数据库"""
     user_id = request.GET.get('user_id')
     diet_id = request.GET.get('diet_id')
     diet_comment = request.GET.get('diet_comment')
@@ -178,7 +178,7 @@ def get_comment(request):
 
 
 def get_recom(request):
-    # 获得个性化推荐菜品
+    """获得个性化推荐菜品"""
     user_id = request.GET.get('user_id')
     user_group = Group(user_id=user_id).group
     if user_group == 0:
@@ -216,7 +216,7 @@ def get_recom(request):
 
 
 def get_search(request):
-    # 模糊搜索
+    """模糊搜索"""
     keyword = request.GET.get('keyword')
     nameResult = Diet.objects.filter(diet_name__icontains=keyword)
     materResult = Diet.objects.filter(diet_material__icontains=keyword)
@@ -242,7 +242,7 @@ def get_search(request):
 
 
 def get_love(request):
-    # 收藏
+    """收藏"""
     user_id = request.GET.get('openid')
     log_list = Log.objects.filter(log_user_id=user_id)
     love_list = []
@@ -264,7 +264,7 @@ def get_love(request):
 
 
 def get_history(request):
-    # 历史记录
+    """历史记录"""
     user_id = request.GET.get('openid')
     log_list = Log.objects.filter(log_user_id=user_id)
     history_list = []
@@ -285,7 +285,7 @@ def get_history(request):
 
 
 def get_canteen(request):
-    # 获得各个餐厅的菜单
+    """获得各个餐厅的菜单"""
     can_name = request.GET.get('keyword')
     diet_list = Diet.objects.filter(diet_location__icontains=can_name)
 
@@ -337,7 +337,7 @@ def get_canteen(request):
 
 
 def get_feedback(request):
-    # 获取反馈的意见
+    """获取反馈的意见"""
     class_array = request.GET.get('mesclass')  # 意见类别
     for cla in class_array:
         if cla['checked'] is True:
