@@ -87,12 +87,13 @@ def get_cook_rank(request):
 
 def is_manager(request):
     # 判断当前用户是否为管理员
-    user_id = int(request.POST.get('user_id', None))
+    user_id = request.GET.get('user_id')
     user_list = User.objects.all()
     for user in user_list:
         if user.user_id == user_id:
-            return JsonResponse({'is_manager': user.is_manager})
-    return HttpResponse(u"用户不存在")
+            return JsonResponse({'is_manager': user.user_manager})
+    info = {'info': '用户不存在'}
+    return HttpResponse(json.dumps(info, ensure_ascii=False), content_type='application/json, charset = utf-8')
 
 
 def add_praise(request):

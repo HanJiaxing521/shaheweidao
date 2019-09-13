@@ -98,8 +98,8 @@ class Attribution(models.Model):
     attribution9 = models.IntegerField()
 
     def __str__(self):
-        #diet_str_id = str(self.diet_id)
-        return self.diet_id
+        diet_str_id = str(self.diet_id)
+        return diet_str_id
 
 
 class Group(models.Model):

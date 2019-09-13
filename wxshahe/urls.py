@@ -14,5 +14,6 @@ urlpatterns = [
     path('wxshahe/history/', wxshahe.views.get_history),
     path('wxshahe/love/', wxshahe.views.get_love),
     path('wxshahe/feedback/', wxshahe.views.get_feedback),
-    path('wxshahe/comment/', wxshahe.views.get_comment)
+    path('wxshahe/comment/', wxshahe.views.get_comment),
+    path('wxshahe/manager/', wxshahe.views.is_manager)
 ]
