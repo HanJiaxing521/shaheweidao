@@ -167,15 +167,11 @@ def get_comment(request):
     user_id = request.GET.get('user_id')
     diet_id = request.GET.get('diet_id')
     diet_comment = request.GET.get('diet_comment')
-    log = Log.objects.filter(log_user_id=user_id,
-                             log_diet_id=diet_id)
-    if len(log) == 0:
-        log = Log(log_user_id=user_id,
-                  log_diet_id=diet_id, log_diet_praise=False, log_diet_evaluation=diet_comment)
-        log.save()
-    else:
-        log[0].log_diet_evaluation = diet_comment
-        log[0].save()
+    log = Log.objects.get(log_user_id=user_id,
+                          log_diet_id=diet_id)
+
+    log['log_diet_evaluation'] = diet_comment
+    log.save()
 
     info = {'info': 'success'}
     return HttpResponse(json.dumps(info, ensure_ascii=False), content_type='application/json, charset = utf-8')
