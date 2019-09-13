@@ -110,6 +110,8 @@ class Group(models.Model):
 
 
 class Feedback(models.Model):
+    # 意见唯一ID
+    que_id = models.AutoField(primary_key=True)
     # 意见类型
     que_class = models.TextField()
     # 提交时间
