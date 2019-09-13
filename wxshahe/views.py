@@ -13,6 +13,7 @@ from wxshahe.models import Log
 from wxshahe.models import Attribution
 from wxshahe.models import Group
 from wxshahe.models import Feedback
+from django.utils import timezone
 # from django.core.paginator import Paginator
 # Create your views here.
 
@@ -123,9 +124,51 @@ def add_praise(request):
     return_json = {'praise_num': pra.diet_praise}
     return HttpResponse(json.dumps(return_json))
 
+def get_love(request):
+    # 收藏
+    user_id = request.GET.get('openid')
+    log_list = Log.objects.filter(log_user_id=user_id)
+    print(len(log_list))
+    love_list = []
+    for log in log_list:
+        if log.log_diet_praise is True:
+            diet = Diet.objects.get(diet_id=log.log_diet_id)
+            result = {'diet_id': diet.diet_id,
+                      'diet_name': diet.diet_name,
+                      'diet_image': diet.diet_image,
+                      'diet_material': diet.diet_material,
+                      'diet_nutrient': diet.diet_nutrient,
+                      'diet_location': diet.diet_location,
+                      'diet_praise': diet.diet_praise,
+                      'diet_cook_id': diet.diet_cook_id
+                      }
+            love_list.append(result)
+    return HttpResponse(json.dumps(love_list, ensure_ascii=False),
+                        content_type='application/json, charset = utf-8')
+
+
+def get_history(request):
+    # 历史记录
+    user_id = request.GET.get('openid')
+    log_list = Log.objects.filter(log_user_id=user_id)
+    print(user_id)
+    history_list = []
+    for log in log_list:
+        diet = Diet.objects.get(diet_id=log.log_diet_id)
+        result = {'diet_id': diet.diet_id,
+                  'diet_name': diet.diet_name,
+                  'diet_image': diet.diet_image,
+                  'diet_material': diet.diet_material,
+                  'diet_nutrient': diet.diet_nutrient,
+                  'diet_location': diet.diet_location,
+                  'diet_praise': diet.diet_praise,
+                  'diet_cook_id': diet.diet_cook_id
+                  }
+        history_list.append(result)
+    return HttpResponse(json.dumps(history_list, ensure_ascii=False),
+                        content_type='application/json, charset = utf-8')
 
 def get_diet_content(request):
-    # 获取单个菜品信息
     curr_diet_id = request.GET.get('diet_id')
     curr_user_id = request.GET.get('user_id')
     log = Log.objects.filter(log_user_id=curr_user_id,
@@ -158,25 +201,6 @@ def get_diet_content(request):
 
     return HttpResponse(json.dumps(diet_content, ensure_ascii=False),
                         content_type='application/json, charset = utf-8')
-
-
-def get_comment(request):
-    # 将评论信息存入数据库
-    user_id = request.GET.get('user_id')
-    diet_id = request.GET.get('diet_id')
-    diet_comment = request.GET.get('diet_comment')
-    log = Log.objects.filter(log_user_id=user_id,
-                             log_diet_id=diet_id)
-    if len(log) == 0:
-        log = Log(log_user_id=user_id,
-                  log_diet_id=diet_id, log_diet_praise=False, log_diet_evaluation=diet_comment)
-        log.save()
-    else:
-        log[0].log_diet_evaluation = diet_comment
-        log[0].save()
-
-    info = {'info': 'success'}
-    return HttpResponse(json.dumps(info, ensure_ascii=False), content_type='application/json, charset = utf-8')
 
 
 def get_recom(request):
@@ -243,48 +267,6 @@ def get_search(request):
                         content_type='application/json, charset = utf-8')
 
 
-def get_love(request):
-    # 收藏
-    user_id = request.GET.get('openid')
-    log_list = Log.objects.filter(log_user_id=user_id)
-    love_list = []
-    for log in log_list:
-        if log.log_diet_praise is True:
-            diet = Diet.objects.get(diet_id=log.log_diet_id)
-            result = {'diet_id': diet.diet_id,
-                      'diet_name': diet.diet_name,
-                      'diet_image': diet.diet_image,
-                      'diet_material': diet.diet_material,
-                      'diet_nutrient': diet.diet_nutrient,
-                      'diet_location': diet.diet_location,
-                      'diet_praise': diet.diet_praise,
-                      'diet_cook_id': diet.diet_cook_id
-                      }
-            love_list.append(result)
-    return HttpResponse(json.dumps(love_list, ensure_ascii=False),
-                        content_type='application/json, charset = utf-8')
-
-
-def get_history(request):
-    # 历史记录
-    user_id = request.GET.get('openid')
-    log_list = Log.objects.filter(log_user_id=user_id)
-    history_list = []
-    for log in log_list:
-        diet = Diet.objects.get(diet_id=log.log_diet_id)
-        result = {'diet_id': diet.diet_id,
-                  'diet_name': diet.diet_name,
-                  'diet_image': diet.diet_image,
-                  'diet_material': diet.diet_material,
-                  'diet_nutrient': diet.diet_nutrient,
-                  'diet_location': diet.diet_location,
-                  'diet_praise': diet.diet_praise,
-                  'diet_cook_id': diet.diet_cook_id
-                  }
-        history_list.append(result)
-    return HttpResponse(json.dumps(history_list, ensure_ascii=False),
-                        content_type='application/json, charset = utf-8')
-
 
 def get_canteen(request):
     # 获得各个餐厅的菜单
@@ -337,11 +319,37 @@ def get_canteen(request):
 
     return HttpResponse(json.dumps(result_list, ensure_ascii=False), content_type='application/json, charset = utf-8')
 
+def get_comment(request):
+    # 将评论信息存入数据库
+    user_id = request.GET.get('user_id')
+    diet_id = request.GET.get('diet_id')
+    diet_comment = request.GET.get('diet_comment')
+    log = Log.objects.filter(log_user_id=user_id,
+                             log_diet_id=diet_id)
+    if len(log) == 0:
+        log = Log(log_user_id=user_id,
+                  log_diet_id=diet_id, log_diet_praise=False, log_diet_evaluation=diet_comment)
+        log.save()
+    else:
+        log[0].log_diet_evaluation = diet_comment
+        log[0].save()
+
+    info = {'info': 'success'}
+    return HttpResponse(json.dumps(info, ensure_ascii=False), content_type='application/json, charset = utf-8')
 
 def get_feedback(request):
     # 获取反馈的意见
-    mes_class = request.GET.get('mesclass')  # 意见类别
-    mes_time = request.GET.get('mestime')    # 提交时间
+    class_array = request.GET.get('mesclass')  # 意见类别
+    class_array = json.loads(class_array)
+    print(type(class_array))
+    for cla in class_array:
+        print(cla)
+        print(cla["checked"])
+        if cla["checked"] is True:
+            mes_class = cla['text']
+            break
+    mes_time = timezone.localtime(timezone.now()).strftime(
+        "%Y-%m-%d %H:%M:%S")  # 提交时间
     mes_text = request.GET.get('mestext')    # 意见内容
     mes_image = request.GET.get('mesimage')  # 图片
     mes_message = request.GET.get('message')  # 联系方式
