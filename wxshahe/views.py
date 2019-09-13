@@ -170,7 +170,7 @@ def get_comment(request):
     log = Log.objects.get(log_user_id=user_id,
                           log_diet_id=diet_id)
 
-    log['log_diet_evaluation'] = diet_comment
+    log.log_diet_evaluation = diet_comment
     log.save()
 
     info = {'info': 'success'}
